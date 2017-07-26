@@ -44,8 +44,34 @@ router.post(`${API_BASE}`, (request, response) => {
 router.get(`${API_BASE}/:id`, (request, response) => {
     AircraftModel.findById(request.params.id)
         .then((doc) => {
-            response.status(200).json({ aircraft: doc });
+            response.status(200).json(doc);
         });
+});
+
+router.put(`${API_BASE}/:id`, (request, response) => {
+    const promise = AircraftModel.findByIdAndUpdate(request.params.id, request.body, { new: true }).exec();
+
+    return promise.then((doc) => {
+        response.status(200).json(doc);
+    })
+    .catch((error) => {
+        console.error(error);
+
+        throw new Error(error);
+    });
+});
+
+router.delete(`${API_BASE}/:id`, (request, response) => {
+    const promise = AircraftModel.findByIdAndRemove(request.params.id, request.body).exec();
+
+    return promise.then((doc) => {
+        response.status(204);
+    })
+    .catch((error) => {
+        console.error(error);
+
+        throw new Error(error);
+    });
 });
 
 
